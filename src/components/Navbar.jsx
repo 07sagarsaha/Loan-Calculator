@@ -72,12 +72,9 @@ const Navbar = () => {
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
 
-          {/* Only show in development mode */}
-          {process.env.NODE_ENV === 'development' && (
-            <Box sx={{ ml: 2 }}>
-              <ErrorTrigger />
-            </Box>
-          )}
+          <Box sx={{ ml: 2 }}>
+            <ErrorTrigger />
+          </Box>
         </Box>
       </Toolbar>
     </AppBar>
