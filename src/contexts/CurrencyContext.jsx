@@ -1,8 +1,9 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-// Get API key from environment variables
-const API_KEY = import.meta.env.VITE_EXCHANGE_RATE_API_KEY;
+// Get API key from environment variables or use a hardcoded one for now
+// In a production app, always use environment variables
+const API_KEY = import.meta.env.VITE_EXCHANGE_RATE_API_KEY || 'b8ccd9d260a39ef6a70bb276';
 
 export const CurrencyContext = createContext({
   currency: 'USD',
@@ -22,16 +23,25 @@ export const CurrencyContextProvider = ({ children }) => {
     const fetchExchangeRates = async () => {
       setIsLoading(true);
       setError(null);
+
+      console.log('Fetching exchange rates with API key:', API_KEY);
+
       try {
-        const response = await axios.get(
-          `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`
-        );
+        const url = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`;
+        console.log('API URL:', url);
+
+        const response = await axios.get(url);
+        console.log('API Response:', response.data);
+
         if (response.data && response.data.conversion_rates) {
           setExchangeRates(response.data.conversion_rates);
+          console.log('Exchange rates loaded successfully');
         } else {
+          console.error('Failed to fetch exchange rates - no conversion_rates in response');
           setError('Failed to fetch exchange rates');
         }
       } catch (err) {
+        console.error('Error fetching exchange rates:', err);
         setError('Error fetching exchange rates: ' + err.message);
       } finally {
         setIsLoading(false);
