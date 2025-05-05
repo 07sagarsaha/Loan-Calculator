@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography, Paper } from '@mui/material';
+import { Box, Button, Container, Typography, Paper, CssBaseline } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HomeIcon from '@mui/icons-material/Home';
@@ -13,20 +13,29 @@ const ErrorPage = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Paper
-        elevation={3}
-        sx={{
-          mt: 12,
-          p: 5,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          borderRadius: 2
-        }}
-      >
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#121212' : '#f5f5f5'
+      }}
+    >
+      <CssBaseline />
+      <Container maxWidth="md" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', py: 4 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 5,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            borderRadius: 2,
+            width: '100%'
+          }}
+        >
         <ErrorOutlineIcon sx={{ fontSize: 80, color: 'error.main', mb: 3 }} />
 
         <Typography variant="h4" component="h1" gutterBottom color="error.main" fontWeight="bold">
@@ -66,6 +75,7 @@ const ErrorPage = () => {
         </Box>
       </Paper>
     </Container>
+    </Box>
   );
 };
 

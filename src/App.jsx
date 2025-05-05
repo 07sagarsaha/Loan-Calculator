@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -9,6 +9,14 @@ import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 function App() {
+  const location = useLocation();
+  const isErrorPage = location.pathname === '/error';
+
+  // Render different layouts based on the current route
+  if (isErrorPage) {
+    return <ErrorPage />;
+  }
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
@@ -17,7 +25,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/exchange-rates" element={<ExchangeRates />} />
-            <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>
