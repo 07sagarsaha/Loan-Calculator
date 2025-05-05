@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ExchangeRates from './pages/ExchangeRates';
 import NotFound from './pages/NotFound';
+import ErrorPage from './pages/ErrorPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/exchange-rates" element={<ExchangeRates />} />
+            <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>

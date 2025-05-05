@@ -14,6 +14,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { ColorModeContext } from '../contexts/ThemeContext';
+import ErrorTrigger from './ErrorTrigger';
 
 const Navbar = () => {
   const theme = useTheme();
@@ -70,6 +71,13 @@ const Navbar = () => {
           >
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
+
+          {/* Only show in development mode */}
+          {process.env.NODE_ENV === 'development' && (
+            <Box sx={{ ml: 2 }}>
+              <ErrorTrigger />
+            </Box>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
