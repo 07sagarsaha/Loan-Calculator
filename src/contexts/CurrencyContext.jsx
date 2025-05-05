@@ -9,6 +9,8 @@ export const CurrencyContext = createContext({
   currency: 'USD',
   setCurrency: () => {},
   exchangeRates: {},
+  lastUpdated: null,
+  baseCode: 'USD',
   isLoading: false,
   error: null,
 });
@@ -16,6 +18,8 @@ export const CurrencyContext = createContext({
 export const CurrencyContextProvider = ({ children }) => {
   const [currency, setCurrency] = useState('USD');
   const [exchangeRates, setExchangeRates] = useState({});
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [baseCode, setBaseCode] = useState('USD');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,6 +39,8 @@ export const CurrencyContextProvider = ({ children }) => {
 
         if (response.data && response.data.conversion_rates) {
           setExchangeRates(response.data.conversion_rates);
+          setLastUpdated(new Date(response.data.time_last_update_unix * 1000));
+          setBaseCode(response.data.base_code || 'USD');
           console.log('Exchange rates loaded successfully');
         } else {
           console.error('Failed to fetch exchange rates - no conversion_rates in response');
@@ -49,12 +55,20 @@ export const CurrencyContextProvider = ({ children }) => {
     };
 
     fetchExchangeRates();
+
+    // Set up auto-refresh every hour
+    const refreshInterval = setInterval(fetchExchangeRates, 60 * 60 * 1000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(refreshInterval);
   }, []);
 
   const value = {
     currency,
     setCurrency,
     exchangeRates,
+    lastUpdated,
+    baseCode,
     isLoading,
     error,
   };

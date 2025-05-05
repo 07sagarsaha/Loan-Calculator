@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import ExchangeRates from './pages/ExchangeRates';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
@@ -14,6 +15,7 @@ function App() {
         <ErrorBoundary>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/exchange-rates" element={<ExchangeRates />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>

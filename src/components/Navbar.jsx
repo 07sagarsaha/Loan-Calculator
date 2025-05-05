@@ -1,22 +1,27 @@
 import { useContext } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Button, 
-  IconButton, 
-  Box, 
-  useTheme 
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Box,
+  useTheme
 } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CalculateIcon from '@mui/icons-material/Calculate';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { ColorModeContext } from '../contexts/ThemeContext';
 
 const Navbar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const location = useLocation();
+
+  // Check if the current route is active
+  const isActive = (path) => location.pathname === path;
 
   return (
     <AppBar position="fixed">
@@ -25,26 +30,42 @@ const Navbar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Loan Calculator
         </Typography>
-        
+
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button 
-            color="inherit" 
-            component={RouterLink} 
+          <Button
+            color="inherit"
+            component={RouterLink}
             to="/"
-            sx={{ 
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            sx={{
+              backgroundColor: isActive('/') ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.15)',
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.25)',
               },
-              mr: 2
+              mr: 1
             }}
           >
             HOME
           </Button>
-          
-          <IconButton 
-            sx={{ ml: 1 }} 
-            onClick={colorMode.toggleColorMode} 
+
+          <Button
+            color="inherit"
+            component={RouterLink}
+            to="/exchange-rates"
+            startIcon={<CurrencyExchangeIcon />}
+            sx={{
+              backgroundColor: isActive('/exchange-rates') ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.15)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+              },
+              mr: 1
+            }}
+          >
+            EXCHANGE RATES
+          </Button>
+
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={colorMode.toggleColorMode}
             color="inherit"
           >
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
