@@ -57,8 +57,8 @@ const LoanCalculatorForm = () => {
   };
 
   return (
-    <Box sx={{ mt: 10, mb: 4, width: '100%', maxWidth: 1200, mx: 'auto' }}>
-      <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
+    <Box sx={{  width: '100%', px: 2 }}>
+      <Typography variant="h4" component="h1" gutterBottom align="start" fontStyle={'bold'}>
         Loan Calculator Dashboard
       </Typography>
 
@@ -68,10 +68,10 @@ const LoanCalculatorForm = () => {
         </Alert>
       )}
 
-      <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
+      
         <form onSubmit={handleCalculate}>
           <Grid container spacing={3} alignItems="center">
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4} width={230}>
               <TextField
                 label="Loan Amount"
                 type="number"
@@ -84,7 +84,7 @@ const LoanCalculatorForm = () => {
                 required
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4} width={230}>
               <TextField
                 label="Interest Rate (%)"
                 type="number"
@@ -97,7 +97,7 @@ const LoanCalculatorForm = () => {
                 required
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4} width={230}>
               <TextField
                 label="Term (Years)"
                 type="number"
@@ -110,7 +110,9 @@ const LoanCalculatorForm = () => {
                 required
               />
             </Grid>
-            <Grid item xs={12} sx={{ textAlign: 'center', mt: 2 }}>
+            
+          </Grid>
+          <Grid item mt={2}>
               <Button
                 type="submit"
                 variant="contained"
@@ -121,13 +123,13 @@ const LoanCalculatorForm = () => {
                 CALCULATE
               </Button>
             </Grid>
-          </Grid>
         </form>
-      </Paper>
+        
+      
 
       {showResults && (
         <Box>
-          <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
+          
             <Grid container spacing={3} alignItems="center">
               <Grid item xs={12} md={4}>
                 <Typography variant="h6">
@@ -135,9 +137,11 @@ const LoanCalculatorForm = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12} md={4}>
+                
+              <Grid item xs={12} md={4}>
                 <CurrencySelector />
               </Grid>
-              <Grid item xs={12} md={4} sx={{ textAlign: 'right' }}>
+              <Grid item xs={12} md={4} sx={{ textAlign: 'left' }}>
                 <Button
                   variant="outlined"
                   color="secondary"
@@ -145,9 +149,10 @@ const LoanCalculatorForm = () => {
                 >
                   RESET TABLE
                 </Button>
+                </Grid>
               </Grid>
             </Grid>
-          </Paper>
+          
 
           <AmortizationTable schedule={amortizationSchedule} />
         </Box>
@@ -168,3 +173,4 @@ const LoanCalculatorForm = () => {
 };
 
 export default LoanCalculatorForm;
+
