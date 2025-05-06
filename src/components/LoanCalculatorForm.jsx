@@ -128,31 +128,35 @@ const LoanCalculatorForm = () => {
       
 
       {showResults && (
-        <Box>
-          
-            <Grid container spacing={3} alignItems="center">
-              <Grid item xs={12} md={4}>
-                <Typography variant="h6">
-                  Monthly EMI: {formatCurrency(emi)}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                
-              <Grid item xs={12} md={4}>
-                <CurrencySelector />
-              </Grid>
-              <Grid item xs={12} md={4} sx={{ textAlign: 'left' }}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleReset}
-                >
-                  RESET TABLE
-                </Button>
-                </Grid>
-              </Grid>
+        <Box sx={{ mt: 4 }}> 
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Monthly EMI: {formatCurrency(emi)}
+              </Typography>
             </Grid>
+          </Grid>
           
+          {/* Currency and Reset buttons in different corners */}
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            mt: 1,
+            mb: 3
+          }}>
+            <Box sx={{ width: '100px' }}>
+              <CurrencySelector />
+            </Box>
+            
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleReset}
+            >
+              RESET TABLE
+            </Button>
+          </Box>
 
           <AmortizationTable schedule={amortizationSchedule} />
         </Box>
@@ -173,4 +177,7 @@ const LoanCalculatorForm = () => {
 };
 
 export default LoanCalculatorForm;
+
+
+
 

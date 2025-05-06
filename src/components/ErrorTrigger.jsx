@@ -12,11 +12,11 @@ const ErrorTrigger = () => {
       color="inherit"
       component={RouterLink}
       to="/error"
-      startIcon={<ErrorIcon />}
+      
       sx={{
-        backgroundColor: isActive ? 'rgba(255, 0, 0, 0.3)' : 'rgba(255, 0, 0, 0.2)',
+        backgroundColor: isActive ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.15)',
         '&:hover': {
-          backgroundColor: 'rgba(255, 0, 0, 0.3)',
+          backgroundColor: 'rgba(255, 255, 255, 0.25)',
         },
       }}
     >

@@ -15,19 +15,29 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Button
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { CurrencyContext } from '../contexts/CurrencyContext';
+import useCurrencyConverter from '../hooks/useCurrencyConverter';
 
 const ExchangeRates = () => {
   const { exchangeRates, isLoading, error } = useContext(CurrencyContext);
+  const { formatCurrency } = useCurrencyConverter();
   const [searchTerm, setSearchTerm] = useState('');
   const [baseCurrency, setBaseCurrency] = useState('USD');
   const [filteredRates, setFilteredRates] = useState([]);
+  
+  // Currency converter state
+  const [fromCurrency, setFromCurrency] = useState('USD');
+  const [toCurrency, setToCurrency] = useState('EUR');
+  const [amount, setAmount] = useState(100);
+  const [convertedAmount, setConvertedAmount] = useState(0);
   
   // Common currencies to show at the top
   const commonCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'INR', 'CNY'];
@@ -63,8 +73,13 @@ const ExchangeRates = () => {
       });
       
       setFilteredRates(filtered);
+      
+      // Calculate converted amount for the currency converter
+      if (fromCurrency && toCurrency && amount) {
+        convertCurrency();
+      }
     }
-  }, [exchangeRates, searchTerm, baseCurrency]);
+  }, [exchangeRates, searchTerm, baseCurrency, fromCurrency, toCurrency, amount]);
   
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -72,6 +87,46 @@ const ExchangeRates = () => {
   
   const handleBaseCurrencyChange = (event) => {
     setBaseCurrency(event.target.value);
+  };
+  
+  const handleFromCurrencyChange = (event) => {
+    setFromCurrency(event.target.value);
+  };
+  
+  const handleToCurrencyChange = (event) => {
+    setToCurrency(event.target.value);
+  };
+  
+  const handleAmountChange = (event) => {
+    const value = event.target.value;
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setAmount(value);
+    }
+  };
+  
+  const swapCurrencies = () => {
+    const temp = fromCurrency;
+    setFromCurrency(toCurrency);
+    setToCurrency(temp);
+  };
+  
+  const convertCurrency = () => {
+    if (!exchangeRates || !fromCurrency || !toCurrency || !amount) return;
+    
+    let result;
+    if (fromCurrency === 'USD') {
+      // Direct conversion from USD
+      result = amount * exchangeRates[toCurrency];
+    } else if (toCurrency === 'USD') {
+      // Direct conversion to USD
+      result = amount / exchangeRates[fromCurrency];
+    } else {
+      // Convert through USD
+      const amountInUSD = amount / exchangeRates[fromCurrency];
+      result = amountInUSD * exchangeRates[toCurrency];
+    }
+    
+    setConvertedAmount(result);
   };
   
   // Function to format the rate with appropriate decimal places
@@ -141,6 +196,101 @@ const ExchangeRates = () => {
       <Typography variant="h4" gutterBottom>
         Live Exchange Rates
       </Typography>
+      
+      {/* Currency Converter Section */}
+      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Currency Converter
+        </Typography>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={5}>
+            <TextField
+              fullWidth
+              label="Amount"
+              variant="outlined"
+              value={amount}
+              onChange={handleAmountChange}
+              type="text"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    {fromCurrency}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Button 
+              variant="outlined" 
+              onClick={swapCurrencies}
+              sx={{ height: '56px', minWidth: '56px' }}
+            >
+              <SwapHorizIcon />
+            </Button>
+          </Grid>
+          
+          <Grid item xs={12} sm={5}>
+            <TextField
+              fullWidth
+              label="Converted Amount"
+              variant="outlined"
+              value={convertedAmount ? formatRate(convertedAmount) : ''}
+              InputProps={{
+                readOnly: true,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    {toCurrency}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={5}>
+            <FormControl fullWidth>
+              <InputLabel id="from-currency-label">From Currency</InputLabel>
+              <Select
+                labelId="from-currency-label"
+                value={fromCurrency}
+                label="From Currency"
+                onChange={handleFromCurrencyChange}
+              >
+                {Object.keys(exchangeRates).sort().map((currency) => (
+                  <MenuItem key={`from-${currency}`} value={currency}>
+                    {currency} - {getCurrencyName(currency)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          
+          <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
+              to
+            </Typography>
+          </Grid>
+          
+          <Grid item xs={12} sm={5}>
+            <FormControl fullWidth>
+              <InputLabel id="to-currency-label">To Currency</InputLabel>
+              <Select
+                labelId="to-currency-label"
+                value={toCurrency}
+                label="To Currency"
+                onChange={handleToCurrencyChange}
+              >
+                {Object.keys(exchangeRates).sort().map((currency) => (
+                  <MenuItem key={`to-${currency}`} value={currency}>
+                    {currency} - {getCurrencyName(currency)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </Paper>
       
       <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
         <Grid container spacing={3} alignItems="center">
@@ -236,3 +386,5 @@ const ExchangeRates = () => {
 };
 
 export default ExchangeRates;
+
+

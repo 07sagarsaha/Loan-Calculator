@@ -102,7 +102,7 @@ const Navbar = () => {
           </>
         ) : null}
         
-        <CalculateIcon sx={{ mr: 1 }} />
+        
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Loan Calculator
         </Typography>
@@ -125,6 +125,7 @@ const Navbar = () => {
                 backgroundColor: isActive('/') ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.15)',
                 '&:hover': {
                   backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  color: isActive('/') ? 'white' : 'black'
                 },
                 mr: 1
               }}
@@ -136,7 +137,7 @@ const Navbar = () => {
               color="inherit"
               component={RouterLink}
               to="/exchange-rates"
-              startIcon={<CurrencyExchangeIcon />}
+              
               sx={{
                 backgroundColor: isActive('/exchange-rates') ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.15)',
                 '&:hover': {
@@ -148,6 +149,12 @@ const Navbar = () => {
               EXCHANGE RATES
             </Button>
 
+            
+            <Box sx={{ mr: 1 }}>
+              <ErrorTrigger />
+            </Box>
+
+            {/* Dark mode toggle only using toggle button no brighness or bark icon */}
             <IconButton
               sx={{ ml: 1 }}
               onClick={colorMode.toggleColorMode}
@@ -156,9 +163,6 @@ const Navbar = () => {
               {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
 
-            <Box sx={{ ml: 2 }}>
-              <ErrorTrigger />
-            </Box>
           </Box>
         )}
       </Toolbar>
@@ -167,5 +171,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 
 
